@@ -21,15 +21,18 @@ window.addEventListener("load", function () {
   var brickOffsetLeft = 38;
   var gamePause = false;
   var score = 0;
+  var level = 1;
 
   var bricks = [];
-  for (var c = 0; c < brickColumnCount; c++) {
-    bricks[c] = [];
-    for (var r = 0; r < brickRowCount; r++) {
-      bricks[c][r] = { x: 0, y: 0, status: 1 };
+  function updateBricksMatrix() {
+    for (var c = 0; c < brickColumnCount; c++) {
+      bricks[c] = [];
+      for (var r = 0; r < brickRowCount; r++) {
+        bricks[c][r] = { x: 0, y: 0, status: 1 };
+      }
     }
   }
-
+  updateBricksMatrix();
   function keyDownHandler(e) {
     if (e.key === "Right" || e.key === "ArrowRight") {
       rightPressed = true;
@@ -64,10 +67,11 @@ window.addEventListener("load", function () {
     ctx.fill();
     ctx.closePath();
   }
-  function drawScore() {
+  function drawScoreAndLevel() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#444";
     ctx.fillText("Score: " + score, 8, 20);
+    ctx.fillText("Level: " + level, canvas.width / 2 - 20, 20);
   }
   function drawBricks() {
     for (var c = 0; c < brickColumnCount; c++) {
@@ -100,6 +104,18 @@ window.addEventListener("load", function () {
             dy = -dy;
             b.status = 0;
             score += 2;
+            if (bricks.every((row) => row.every((el) => el.status === 0))) {
+              brickRowCount++;
+              level++;
+              updateBricksMatrix();
+              gameRest();
+              draw();
+              gamePause = true;
+              setTimeout(function () {
+                gamePause = false;
+              }, 1000);
+              // Needed for Chrome to end game
+            }
           }
         }
       }
@@ -113,7 +129,7 @@ window.addEventListener("load", function () {
     drawPaddle();
     drawBricks();
     collisionDetection();
-    drawScore();
+    drawScoreAndLevel();
     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
       dx = -dx;
     }
