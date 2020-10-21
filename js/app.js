@@ -135,6 +135,9 @@ window.addEventListener("load", function () {
     paddleX = canvas.width / 2 - paddleWidth / 2;
     rightPressed = false;
     leftPressed = false;
+    if (bricks.every((row) => row.every((el) => el.status === 0))) {
+      bricks = bricks.map((row) => row.map((el) => ({ ...el, status: 1 })));
+    }
   }
   gameRest();
   var update = setInterval(draw, 10);
