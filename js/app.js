@@ -20,6 +20,7 @@ window.addEventListener("load", function () {
   var brickOffsetTop = 30;
   var brickOffsetLeft = 38;
   var gamePause = false;
+  var score = 0;
 
   var bricks = [];
   for (var c = 0; c < brickColumnCount; c++) {
@@ -63,6 +64,11 @@ window.addEventListener("load", function () {
     ctx.fill();
     ctx.closePath();
   }
+  function drawScore() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#444";
+    ctx.fillText("Score: " + score, 8, 20);
+  }
   function drawBricks() {
     for (var c = 0; c < brickColumnCount; c++) {
       for (var r = 0; r < brickRowCount; r++) {
@@ -93,11 +99,13 @@ window.addEventListener("load", function () {
           ) {
             dy = -dy;
             b.status = 0;
+            score += 2;
           }
         }
       }
     }
   }
+
   function draw() {
     if (gamePause) return false;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -105,6 +113,7 @@ window.addEventListener("load", function () {
     drawPaddle();
     drawBricks();
     collisionDetection();
+    drawScore();
     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
       dx = -dx;
     }
