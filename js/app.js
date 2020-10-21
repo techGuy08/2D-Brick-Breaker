@@ -19,6 +19,7 @@ window.addEventListener("load", function () {
   var brickPadding = 10;
   var brickOffsetTop = 30;
   var brickOffsetLeft = 38;
+  var gamePause = false;
 
   var bricks = [];
   for (var c = 0; c < brickColumnCount; c++) {
@@ -33,6 +34,9 @@ window.addEventListener("load", function () {
       rightPressed = true;
     } else if (e.key === "Left" || e.key === "ArrowLeft") {
       leftPressed = true;
+    }
+    if (e.keyCode === 80) {
+      gamePause = !gamePause;
     }
   }
   function keyUpHandler(e) {
@@ -95,6 +99,7 @@ window.addEventListener("load", function () {
     }
   }
   function draw() {
+    if (gamePause) return false;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall();
     drawPaddle();
