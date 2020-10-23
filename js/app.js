@@ -121,6 +121,15 @@ window.addEventListener("load", function () {
             if (bricks.every((row) => row.every((el) => el.status === 0))) {
               level++;
               brickRowCount++;
+              if (level === 6) {
+                alert(
+                  "Congratulations!! you Beat the game! \n Your Score: " + score
+                );
+                level = 1;
+                brickRowCount = 3;
+                score = 0;
+                lives = 3;
+              }
               updateBricksMatrix();
               gameRest();
               draw();
@@ -156,7 +165,7 @@ window.addEventListener("load", function () {
       } else {
         lives--;
         gameRest();
-       
+
         if (lives === -1) {
           alert("Game Over");
           brickRowCount = 3;
